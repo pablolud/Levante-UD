@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draft Histórico Levante UD</title>
+
+    <!-- === AQUÍ EMPIEZA EL DISEÑO (CSS) === -->
+    <style>
+        body {
+            background-color: #003366;
+            color: white;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .campo-futbol {
+            width: 380px;
+            height: 550px;
+            background-color: #2E8B57;
+            border: 4px solid white;
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            padding: 10px 0;
+        }
+
+        .fila {
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hueco {
+            width: 65px;
+            height: 65px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 2px dashed white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            padding: 2px;
+        }
+
+        .ocupado {
+            background-color: #003366;
+            border: 2px solid #A60033;
+            color: white;
+            border-style: solid;
+        }
+
+        .zona-draft {
+            background-color: #A60033;
+            padding: 20px;
+            margin-top: 20px;
+            border-radius: 10px;
+        }
+
+        .opciones-jugadores {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .carta-draft {
+            background-color: white;
+            color: black;
+            border: 3px solid #003366;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+            .carta-draft:hover {
+                background-color: #ddd;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- === AQUÍ EMPIEZA LA ESTRUCTURA (HTML) === -->
+    <header>
+        <h1>Draft Histórico Levante UD - Siglo XXI</h1>
+        <p>Elige tu 11 ideal granota</p>
+    </header>
+
+    <main class="contenedor-principal">
+        <section class="campo-futbol" id="campo">
+            <div class="fila">
+                <div class="hueco" id="DC1">DC</div>
+                <div class="hueco" id="DC2">DC</div>
+            </div>
+            <div class="fila">
+                <div class="hueco" id="MI">MI</div>
+                <div class="hueco" id="MC1">MC</div>
+                <div class="hueco" id="MC2">MC</div>
+                <div class="hueco" id="MD">MD</div>
+            </div>
+            <div class="fila">
+                <div class="hueco" id="LI">LI</div>
+                <div class="hueco" id="DFC1">DFC</div>
+                <div class="hueco" id="DFC2">DFC</div>
+                <div class="hueco" id="LD">LD</div>
+            </div>
+            <div class="fila">
+                <div class="hueco" id="POR">POR</div>
+            </div>
+        </section>
+
+        <section class="zona-draft">
+            <h2>Selecciona un jugador:</h2>
+            <div class="opciones-jugadores" id="opciones"></div>
+        </section>
+    </main>
+
+    <!-- === AQUÍ EMPIEZA EL CEREBRO Y LOS JUGADORES (JAVASCRIPT) === -->
+    <script>
+        let jugadoresLevante = [
+            { nombre: "Rafa", posicion: "Portero", cod: "POR" },
+            { nombre: "Juan Luis Mora", posicion: "Portero", cod: "POR" },
+            { nombre: "José Fco. Molina", posicion: "Portero", cod: "POR" },
+            { nombre: "Pablo Cavallero", posicion: "Portero", cod: "POR" },
+            { nombre: "Vladan Kujović", posicion: "Portero", cod: "POR" },
+            { nombre: "Manolo Reina", posicion: "Portero", cod: "POR" },
+            { nombre: "Gustavo Munúa", posicion: "Portero", cod: "POR" },
+            { nombre: "Keylor Navas", posicion: "Portero", cod: "POR" },
+            { nombre: "Diego Mariño", posicion: "Portero", cod: "POR" },
+            { nombre: "Rubén Martínez", posicion: "Portero", cod: "POR" },
+            { nombre: "Oier Olazábal", posicion: "Portero", cod: "POR" },
+            { nombre: "Raúl Fernández", posicion: "Portero", cod: "POR" },
+            { nombre: "Mitchell Langerak", posicion: "Portero", cod: "POR" },
+            { nombre: "Koke Vegas", posicion: "Portero", cod: "POR" },
+            { nombre: "Aitor Fernández", posicion: "Portero", cod: "POR" },
+            { nombre: "Dani Cárdenas", posicion: "Portero", cod: "POR" },
+            { nombre: "Joan Femenías", posicion: "Portero", cod: "POR" },
+            { nombre: "Andrés Fernández", posicion: "Portero", cod: "POR" },
+            { nombre: "Jesule", posicion: "Central", cod: "DFC" },
+            { nombre: "Alexis Suárez", posicion: "Central", cod: "DFC" },
+            { nombre: "Álvaro Maior", posicion: "Central", cod: "DFC" },
+            { nombre: "Frédéric Déhu", posicion: "Central", cod: "DFC" },
+            { nombre: "José Antonio Culebras", posicion: "Central", cod: "DFC" },
+            { nombre: "Sergio Ballesteros", posicion: "Central", cod: "DFC" },
+            { nombre: "Nano Rivas", posicion: "Central", cod: "DFC" },
+            { nombre: "Héctor Rodas", posicion: "Central", cod: "DFC" },
+            { nombre: "David Navarro", posicion: "Central", cod: "DFC" },
+            { nombre: "Gustavo Cabral", posicion: "Central", cod: "DFC" },
+            { nombre: "Loukas Vyntra", posicion: "Central", cod: "DFC" },
+            { nombre: "Issam El Adoua", posicion: "Central", cod: "DFC" },
+            { nombre: "Zouhair Feddal", posicion: "Central", cod: "DFC" },
+            { nombre: "Carl Medjani", posicion: "Central", cod: "DFC" },
+            { nombre: "Chema Rodríguez", posicion: "Central", cod: "DFC" },
+            { nombre: "Sergio Postigo", posicion: "Central", cod: "DFC" },
+            { nombre: "Róber Pier", posicion: "Central", cod: "DFC" },
+            { nombre: "Erick Cabaco", posicion: "Central", cod: "DFC" },
+            { nombre: "Rúben Vezo", posicion: "Central", cod: "DFC" },
+            { nombre: "Óscar Duarte", posicion: "Central", cod: "DFC" },
+            { nombre: "Shkodran Mustafi", posicion: "Central", cod: "DFC" },
+            { nombre: "Martín Cáceres", posicion: "Central", cod: "DFC" },
+            { nombre: "Adrián de la Fuente", posicion: "Central", cod: "DFC" },
+            { nombre: "Álex Muñoz", posicion: "Central", cod: "DFC" },
+            { nombre: "Nikola Maraš", posicion: "Central", cod: "DFC" },
+            { nombre: "Jorge Cabello", posicion: "Central", cod: "DFC" },
+            { nombre: "Unai Elgezabal", posicion: "Central", cod: "DFC" },
+            { nombre: "Iñaki Descarga", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Javi Venta", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Christian Lell", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Pedro López", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Iván López", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Coke Andújar", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Jorge Miramón", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Son", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Marc Pubill", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Xavi Grande", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Andrés García", posicion: "Lat. Der.", cod: "LD" },
+            { nombre: "Luis Rubiales", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Ian Harte", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Asier del Horno", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Juanfran García", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Nikos Karabelas", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Antonio Luna", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Toño García", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Carlos Clerc", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Marcelo Saracchi", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Enric Franquesa", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Álex Valle", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Marcos Navarro", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Diego Pampín", posicion: "Lat. Izq.", cod: "LI" },
+            { nombre: "Diego Camacho", posicion: "Medio", cod: "MC" },
+            { nombre: "Sylvain N'Diaye", posicion: "Medio", cod: "MC" },
+            { nombre: "Miguel Ángel", posicion: "Medio", cod: "MC" },
+            { nombre: "Mathieu Berson", posicion: "Medio", cod: "MC" },
+            { nombre: "Miguel Pallardó", posicion: "Medio", cod: "MC" },
+            { nombre: "Xavi Torres", posicion: "Medio", cod: "MC" },
+            { nombre: "Vicente Iborra", posicion: "Medio", cod: "MC" },
+            { nombre: "Pape Diop", posicion: "Medio", cod: "MC" },
+            { nombre: "Simão Mate", posicion: "Medio", cod: "MC" },
+            { nombre: "Víctor Camarasa", posicion: "Medio", cod: "MC" },
+            { nombre: "Jefferson Lerma", posicion: "Medio", cod: "MC" },
+            { nombre: "José Campaña", posicion: "Medio", cod: "MC" },
+            { nombre: "Enis Bardhi", posicion: "Medio", cod: "MC" },
+            { nombre: "Sanjin Prcić", posicion: "Medio", cod: "MC" },
+            { nombre: "Gonzalo Melero", posicion: "Medio", cod: "MC" },
+            { nombre: "Nemanja Radoja", posicion: "Medio", cod: "MC" },
+            { nombre: "Nikola Vukčević", posicion: "Medio", cod: "MC" },
+            { nombre: "Mickaël Malsa", posicion: "Medio", cod: "MC" },
+            { nombre: "Pepelu", posicion: "Medio", cod: "MC" },
+            { nombre: "Pablo Martínez", posicion: "Medio", cod: "MC" },
+            { nombre: "Joni Montiel", posicion: "Medio", cod: "MC" },
+            { nombre: "Oriol Rey", posicion: "Medio", cod: "MC" },
+            { nombre: "Sergio Lozano", posicion: "Medio", cod: "MC" },
+            { nombre: "Ángel Algobia", posicion: "Medio", cod: "MC" },
+            { nombre: "Giorgi Kochorashvili", posicion: "Medio", cod: "MC" },
+            { nombre: "Félix Ettien", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Mustapha Riga", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Valdo", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Pedro Ríos", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Nabil El Zhar", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Jordi Xumetra", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Jason Remeseiro", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Hernâni", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Jorge De Frutos", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Roger Brugué", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Carlos Álvarez", posicion: "Int. Der.", cod: "MD" },
+            { nombre: "Jofre Mateu", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "Juanlu Gómez", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "Rubén Suárez", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "Rubén García", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "Andreas Ivanschitz", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "José Luis Morales", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "Rubén Rochina", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "Alejandro Cantero", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "Valeri Fernández", posicion: "Int. Izq.", cod: "MI" },
+            { nombre: "Paco Salillas", posicion: "Delantero", cod: "DC" },
+            { nombre: "Edwin Congo", posicion: "Delantero", cod: "DC" },
+            { nombre: "Gustavo Reggi", posicion: "Delantero", cod: "DC" },
+            { nombre: "Vladimir Manchev", posicion: "Delantero", cod: "DC" },
+            { nombre: "Salva Ballesta", posicion: "Delantero", cod: "DC" },
+            { nombre: "Meyong Ze", posicion: "Delantero", cod: "DC" },
+            { nombre: "Christian Riganò", posicion: "Delantero", cod: "DC" },
+            { nombre: "Alex Geijo", posicion: "Delantero", cod: "DC" },
+            { nombre: "Arouna Koné", posicion: "Delantero", cod: "DC" },
+            { nombre: "Felipe Caicedo", posicion: "Delantero", cod: "DC" },
+            { nombre: "Christian Stuani", posicion: "Delantero", cod: "DC" },
+            { nombre: "Obafemi Martins", posicion: "Delantero", cod: "DC" },
+            { nombre: "David Barral", posicion: "Delantero", cod: "DC" },
+            { nombre: "Víctor Casadesús", posicion: "Delantero", cod: "DC" },
+            { nombre: "Kalu Uche", posicion: "Delantero", cod: "DC" },
+            { nombre: "Deyverson", posicion: "Delantero", cod: "DC" },
+            { nombre: "Giuseppe Rossi", posicion: "Delantero", cod: "DC" },
+            { nombre: "Enes Ünal", posicion: "Delantero", cod: "DC" },
+            { nombre: "Emmanuel Boateng", posicion: "Delantero", cod: "DC" },
+            { nombre: "Roger Martí", posicion: "Delantero", cod: "DC" },
+            { nombre: "Giampaolo Pazzini", posicion: "Delantero", cod: "DC" },
+            { nombre: "Borja Mayoral", posicion: "Delantero", cod: "DC" },
+            { nombre: "Sergio León", posicion: "Delantero", cod: "DC" },
+            { nombre: "Dani Gómez", posicion: "Delantero", cod: "DC" },
+            { nombre: "Roberto Soldado", posicion: "Delantero", cod: "DC" },
+            { nombre: "Wesley Moraes", posicion: "Delantero", cod: "DC" },
+            { nombre: "Moha Bouldini", posicion: "Delantero", cod: "DC" },
+            { nombre: "Fabrício Santos", posicion: "Delantero", cod: "DC" },
+            { nombre: "Iván Romero", posicion: "Delantero", cod: "DC" }
+        ];
+
+        let huecosDisponibles = {
+            "DC": ["DC1", "DC2"],
+            "DFC": ["DFC1", "DFC2"],
+            "MC": ["MC1", "MC2"],
+            "POR": ["POR"],
+            "LI": ["LI"],
+            "LD": ["LD"],
+            "MI": ["MI"],
+            "MD": ["MD"]
+        };
+
+        const zonaOpciones = document.getElementById("opciones");
+
+        function mostrarOpcionesDraft() {
+            zonaOpciones.innerHTML = "";
+            let quedanHuecos = false;
+            for (let posicion in huecosDisponibles) {
+                if (huecosDisponibles[posicion].length > 0) {
+                    quedanHuecos = true;
+                    break;
+                }
+            }
+
+            if (!quedanHuecos) {
+                zonaOpciones.innerHTML = "<h3 style='color: white;'>¡Draft completado! Ya tienes tu 11 histórico granota.</h3>";
+                return;
+            }
+
+            const jugadoresValidos = jugadoresLevante.filter(jugador => huecosDisponibles[jugador.cod].length > 0);
+
+            if (jugadoresValidos.length === 0) {
+                zonaOpciones.innerHTML = "<h3 style='color: white;'>No quedan jugadores en la base de datos para rellenar las posiciones.</h3>";
+                return;
+            }
+
+            const jugadoresMezclados = jugadoresValidos.sort(() => 0.5 - Math.random());
+            const tresOpciones = jugadoresMezclados.slice(0, 3);
+
+            tresOpciones.forEach(jugador => {
+                zonaOpciones.innerHTML += `
+                    <button class="carta-draft" onclick="elegirJugador('${jugador.nombre}', '${jugador.cod}')">
+                        <strong>${jugador.nombre}</strong> <br>
+                        ${jugador.posicion}
+                    </button>
+                `;
+            });
+        }
+
+        function elegirJugador(nombre, codigoPosicion) {
+            const idHuecoExacto = huecosDisponibles[codigoPosicion].shift();
+            const huecoHTML = document.getElementById(idHuecoExacto);
+            if (huecoHTML) {
+                huecoHTML.innerHTML = nombre;
+                huecoHTML.classList.add("ocupado");
+            }
+            jugadoresLevante = jugadoresLevante.filter(j => j.nombre !== nombre);
+            mostrarOpcionesDraft();
+        }
+
+        mostrarOpcionesDraft();
+    </script>
+</body>
+</html>
